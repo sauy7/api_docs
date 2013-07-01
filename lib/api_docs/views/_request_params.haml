@@ -1,0 +1,9 @@
+%table
+  - request_params.each do |key, value|
+    %tr
+      %th= key
+      %td
+        - if value.is_a?(Hash)
+          = haml :_request_params, locals: { request_params: value }
+        - else
+          = value

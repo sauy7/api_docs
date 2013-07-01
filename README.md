@@ -11,7 +11,7 @@ gem 'api_docs'
 To access generated docs mount it to a path in your `routes.rb` like this:
 
 ``` ruby
-mount ApiDocs::Engine => '/api-docs'
+mount ApiDocs::Web => '/api-docs'
 ```
 
 You may also want to add js/css to your asset pipeline manifests:

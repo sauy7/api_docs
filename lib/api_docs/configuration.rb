@@ -20,7 +20,6 @@ class ApiDocs::Configuration
   # Configuration defaults
   def initialize
     @docs_path          = Rails.root.join('doc/api')
-    @base_controller    = 'ApplicationController'
     @ignored_attributes = %w(created_at updated_at)
     @reload_docs_folder = false
     @generate_on_demand = false

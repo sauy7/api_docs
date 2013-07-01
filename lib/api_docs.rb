@@ -1,7 +1,9 @@
+p "dsgsghshsdhsdgs"
 require 'api_docs/version'
 require 'api_docs/engine'
 require 'api_docs/configuration'
 require 'api_docs/test_helper'
+require 'api_docs/web'
 
 module ApiDocs
 

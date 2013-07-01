@@ -18,4 +18,6 @@ Gem::Specification.new do |s|
   
   s.add_dependency 'rails', '>=3.1.0'
   s.add_dependency 'haml-rails'
+  s.add_dependency 'sinatra'
+  s.add_dependency 'sinatra-reloader'
 end
