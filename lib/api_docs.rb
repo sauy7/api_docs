@@ -1,4 +1,3 @@
-p "dsgsghshsdhsdgs"
 require 'api_docs/version'
 require 'api_docs/engine'
 require 'api_docs/configuration'
