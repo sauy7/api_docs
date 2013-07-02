@@ -3,9 +3,6 @@ class ApiDocs::Configuration
   # Where to find the folder with documentation files
   attr_accessor :docs_path
   
-  # Controller that ApiDocs::DocsController inherits from
-  attr_accessor :base_controller
-  
   # Array of ignored attributes. Attributes that don't really change
   # the content like timestamps.
   attr_accessor :ignored_attributes
@@ -16,6 +13,10 @@ class ApiDocs::Configuration
   # Generates docs on demand only. False by default
   # When enabled docs will generate only if `ENV['API_DOCS']` is set
   attr_accessor :generate_on_demand
+  
+  # Remove attributes which shouldn't be calculated in the key hash.
+  # Is useful when you're using auto generated tokens.
+  attr_accessor :exclude_key_params
     
   # Configuration defaults
   def initialize
@@ -23,5 +24,6 @@ class ApiDocs::Configuration
     @ignored_attributes = %w(created_at updated_at)
     @reload_docs_folder = false
     @generate_on_demand = false
+    @exclude_key_params = []
   end
 end

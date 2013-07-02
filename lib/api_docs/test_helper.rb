@@ -34,12 +34,13 @@ module ApiDocs::TestHelper
       c = request.filtered_parameters['controller']
       a = request.filtered_parameters['action']
     
-      file_path = File.expand_path("#{c.gsub('/', ':')}.yml", ApiDocs.config.docs_path)
-      params    = ApiDocs::TestHelper.api_deep_clean_params(params)
+      file_path  = File.expand_path("#{c.gsub('/', ':')}.yml", ApiDocs.config.docs_path)
+      key_params = ApiDocs::TestHelper.api_deep_clean_params(params, true)
+      params     = ApiDocs::TestHelper.api_deep_clean_params(params)
     
       # Marking response as an unique
       key = 'ID-' + Digest::MD5.hexdigest("
-        #{method}#{path}#{meta}#{params}#{response.status}}
+        #{method}#{path}#{meta}#{key_params}#{response.status}}
       ")
     
       data = if File.exists?(file_path)
@@ -65,11 +66,16 @@ module ApiDocs::TestHelper
   
   # Cleans up params. Removes things like File object handlers
   # Sets up ignored values so we don't generate new keys for same data
-  def self.api_deep_clean_params(params)
+  def self.api_deep_clean_params(params, for_key = false)
     case params
     when Hash
+      if for_key
+        params = params.with_indifferent_access
+        ApiDocs.config.exclude_key_params.to_a.each{|e| params.delete(e) }
+      end
+
       params.each_with_object({}) do |(key, value), res|
-        res[key.to_s] = ApiDocs::TestHelper.api_deep_clean_params(value)
+        res[key.to_s] = ApiDocs::TestHelper.api_deep_clean_params(value, for_key)
       end
     when Array
       params.collect{|value| ApiDocs::TestHelper.api_deep_clean_params(value)}
