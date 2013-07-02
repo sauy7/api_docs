@@ -5,11 +5,12 @@
         %th= k.to_s.titleize
         %td= v
 
-  %tr.info
-    %th Request
-    %td
-      %span.label.label-info= action['method']
-      %code= action['path']
+  - if action['method'].present? || action['path'].present?
+    %tr.info
+      %th Request
+      %td
+        %span.label.label-info= action['method']
+        %code= action['path']
 
   - if action['headers'].present? && action['headers'].is_a?(Hash)
     %tr
@@ -21,16 +22,18 @@
       %th Parameters
       %td= haml :_request_params, locals: { request_params: action['params'] }
 
-  %tr.info
-    %th Response
-    %td
-      %span.label{:class => (action['status'].to_s[0] == '4') ? 'label-important' : 'label-success'}
-        = action['status']
+  - if action['status'].present?
+    %tr.info
+      %th Response
+      %td
+        %span.label{:class => (action['status'].to_s[0] == '4') ? 'label-important' : 'label-success'}
+          = action['status']
 
-  %tr
-    %th Body
-    %td
-      %pre
-        = preserve do
-          :escaped
-            #{ JSON.pretty_generate(JSON.parse(action['body'])) rescue action['body'] }
+  - if action['body'].present?
+    %tr
+      %th Body
+      %td
+        %pre
+          = preserve do
+            :escaped
+              #{ JSON.pretty_generate(JSON.parse(action['body'])) rescue action['body'] }
