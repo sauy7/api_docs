@@ -99,6 +99,9 @@ ApiDocs.configure do |config|
   # Generates docs on demand only. False by default.
   # When enabled docs will generate only if `ENV['API_DOCS']` is set
   attr_accessor :generate_on_demand
+
+  # Exclude params if they are always dynamic
+  config.exclude_key_params = [:token]
   
 end
 ```
