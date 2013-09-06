@@ -17,7 +17,7 @@ module ApiDocs
     helpers do
       def controllers
         @controllers ||= begin
-          Dir.glob(ApiDocs.config.docs_path.join('*.yml')).inject({}) do |memo, file_path|
+          Dir.glob(ApiDocs.config.docs_path.join('*.yml')).sort.inject({}) do |memo, file_path|
             memo[File.basename(file_path, '.yml')] = YAML.load_file(file_path)
             memo
           end
