@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'haml-rails'
   s.add_dependency 'sinatra'
   s.add_dependency 'sinatra-reloader'
+  s.add_dependency 'redcarpet'
 end

@@ -11,11 +11,13 @@
       .span2
         %ul.nav.nav-list#api-doc-nav
           - controllers.each_with_index do |(controller, actions), ci|
-            %li.nav-header
-              = controller.gsub(/\W/, '_').humanize.titleize
-
+            %li.nav-header{:class => (ci == 0) ? 'active' : ''}
+              - if markdown_not_exist?(controller)
+                =controller.gsub(/\W/, '_').humanize.titleize
+              - else
+                %a{ href: "##{controller.gsub(/\W/, '_')}", :data => {:toggle => 'tab'} }= controller.gsub(/\W/, '_').humanize.titleize
             - actions.each_with_index do |(action, data), ai|
-              %li{:class => (ci == 0 && ai == 0) ? 'active' : ''}
+              %li{:class => (ci == 0 && ai == 0 && markdown_not_exist?(controller)) ? 'active' : ''}
                 - tab_id = "#{controller.gsub(/\W/, '_')}_#{action}"
                 %a{ href: "##{tab_id}", :data => {:toggle => 'tab'} }= action.humanize.titleize
       .span10
@@ -23,6 +25,10 @@
           - controllers.each_with_index do |(controller, actions), ci|
             - actions.each_with_index do |(action, data), ai|
               - tab_id = "#{controller.gsub(/\W/, '_')}_#{action}"
-              .tab-pane{:id => tab_id, :class => (ci == 0 && ai == 0) ? 'active' : ''}
+              .tab-pane{:id => tab_id, :class => (ci == 0 && ai == 0 && markdown_not_exist?(controller)) ? 'active' : ''}
                 - data.each do |_, data|
                   = haml :_action, locals: {action: data}
+            - tab_global = "#{controller.gsub(/\W/, '_')}"
+            - unless markdown_not_exist?(controller)
+              .tab-pane{:id => tab_global, :class => (ci == 0) ? 'active' : ''}
+                = haml :_controller_index, locals: {controller: controller}

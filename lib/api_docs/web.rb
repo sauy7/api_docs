@@ -1,6 +1,8 @@
 require 'yaml'
 require 'sinatra/base'
 require "bundler/setup"
+require 'rdoc'
+require 'rdoc/markdown'
 
 module ApiDocs
   class Web < Sinatra::Base
@@ -39,10 +41,13 @@ module ApiDocs
           ["bootstrap.min.js"].map{|file| File.read("#{asset_path}/#{file}")}.join("\n")
         end
       end
+
+      def markdown_not_exist? controller_name
+        !File.exist?(ApiDocs.config.docs_path.join("#{controller_name}.md"))
+      end
     end
 
     get '/' do
-      controllers.inspect
       haml :index
     end
 
