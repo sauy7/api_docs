@@ -1,8 +1,6 @@
 require 'yaml'
 require 'sinatra/base'
 require "bundler/setup"
-require 'rdoc'
-require 'rdoc/markdown'
 
 module ApiDocs
   class Web < Sinatra::Base
