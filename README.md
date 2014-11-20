@@ -82,7 +82,7 @@ So in our case:
 
 and after you will see something like this:
 
-![Api Docs Example](https://github.com/twg/api_docs/raw/master/doc/markdown_reader_controller.png)
+![Api Docs Example](https://github.com/guiferrpereira/api_docs/blob/master/doc/markdown_reader_controller.png)
 
 ## Usage
 Just navigate to the path you mounted *api_docs* to. Perhaps `http://yourapp/api-docs`.
