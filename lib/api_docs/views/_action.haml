@@ -20,11 +20,7 @@
   - if action['params'].present? && action['params'].is_a?(Hash)
     %tr
       %th Parameters
-      %td
-        %pre
-          = preserve do
-            :escaped
-              #{ JSON.pretty_generate(action['params']) rescue action['params'] }
+      %td= haml :_request_params, locals: { request_params: action['params'] }
 
   - if action['status'].present?
     %tr.info
