@@ -14,11 +14,6 @@ To access generated docs mount it to a path in your `routes.rb` like this:
 mount ApiDocs::Web => '/api-docs'
 ```
 
-You may also want to add js/css to your asset pipeline manifests:
-
-```
-require api_docs
-```
 
 Documents view is made to work with [Twitter Bootstrap](http://twitter.github.com/bootstrap) css and js libraries.
 
@@ -77,6 +72,18 @@ show:
       message: User not found
 ```
 
+## Add Documentation on Controller
+
+You just need to add a file on doc folder, with the same name yml file was generated.
+So in our case:
+
+`docs/api/users.yml`
+`docs/api/users.md`
+
+and after you will see something like this:
+
+![Api Docs Example](https://github.com/twg/api_docs/raw/master/doc/markdown_reader_controller.png)
+
 ## Usage
 Just navigate to the path you mounted *api_docs* to. Perhaps `http://yourapp/api-docs`.
 
@@ -88,21 +95,21 @@ You can change the default configuration of this gem by adding the following cod
 ApiDocs.configure do |config|
   # folder path where api docs are saved to
   config.docs_path = Rails.root.join('doc/api')
-  
+
   # controller that ApiDocs controller inherits from.
   # Useful for hiding it behind admin controller.
   config.base_controller = 'ApplicationController'
-  
+
   # Remove doc files before running tests. False by default.
   config.reload_docs_folder = false
-  
+
   # Generates docs on demand only. False by default.
   # When enabled docs will generate only if `ENV['API_DOCS']` is set
   attr_accessor :generate_on_demand
 
   # Exclude params if they are always dynamic
   config.exclude_key_params = [:token]
-  
+
 end
 ```
 
@@ -111,3 +118,4 @@ end
 ---
 
 Copyright 2012 Oleg Khabarov, Jack Neto, [The Working Group, Inc](http://twg.ca)
+
