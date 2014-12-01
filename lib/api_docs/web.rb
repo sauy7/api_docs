@@ -36,7 +36,7 @@ module ApiDocs
 
       def javascripts
         @javascripts ||= begin
-          ["bootstrap.min.js"].map{|file| File.read("#{asset_path}/#{file}")}.join("\n")
+          ["jquery.min.js", "bootstrap.min.js"].map{|file| File.read("#{asset_path}/#{file}")}.join("\n")
         end
       end
 
