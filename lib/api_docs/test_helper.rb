@@ -1,5 +1,5 @@
 module ApiDocs::TestHelper
-  
+
   module InstanceMethods
     # Method that allows test creation and will document results in a YAML file
     # Example usage:
@@ -11,50 +11,51 @@ module ApiDocs::TestHelper
       parsed_path   = path.dup
       parsed_params = params.dup
 
-    
+
       parsed_params.each do |k, v|
         parsed_params.delete(k) if parsed_path.gsub!(":#{k}", v.to_s)
       end
-      
+
       # Making actual test request. Based on the example above:
       #   get '/users/12345'
-      
+
       send(method, parsed_path, parsed_params, headers)
-      
+
       meta = Hash.new
       yield meta if block_given?
-      
+
       # Not writing anything to the files unless there was a demand
       if ApiDocs.config.generate_on_demand
         return unless ENV['API_DOCS']
       end
-    
+
       # Assertions inside test block didn't fail. Preparing file
       # content to be written
       c = request.filtered_parameters['controller']
       a = request.filtered_parameters['action']
-    
+
       file_path  = File.expand_path("#{c.gsub('/', ':')}.yml", ApiDocs.config.docs_path)
       key_params = ApiDocs::TestHelper.api_deep_clean_params(params, true)
       params     = ApiDocs::TestHelper.api_deep_clean_params(params)
-    
+
       # Marking response as an unique
       key = 'ID-' + Digest::MD5.hexdigest("
         #{method}#{path}#{meta}#{key_params}#{response.status}}
       ")
-    
+
       data = if File.exists?(file_path)
         YAML.load_file(file_path) rescue Hash.new
       else
         Hash.new
       end
-    
+
       data[a] ||= { }
       data[a][key] = {
         'meta'        => meta,
         'method'      => request.method,
         'path'        => path,
         'headers'     => headers,
+        'cookies'     => cookies.to_hash,
         'params'      => ApiDocs::TestHelper.api_deep_clean_params(params),
         'status'      => response.status,
         'body'        => response.body
@@ -63,7 +64,7 @@ module ApiDocs::TestHelper
       File.open(file_path, 'w'){|f| f.write(data.to_yaml)}
     end
   end
-  
+
   # Cleans up params. Removes things like File object handlers
   # Sets up ignored values so we don't generate new keys for same data
   def self.api_deep_clean_params(params, for_key = false)
@@ -80,7 +81,7 @@ module ApiDocs::TestHelper
     when Array
       params.collect{|value| ApiDocs::TestHelper.api_deep_clean_params(value)}
     else
-      case params 
+      case params
       when Rack::Test::UploadedFile
         'BINARY'
       else

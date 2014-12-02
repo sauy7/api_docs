@@ -12,6 +12,11 @@
         %span.label.label-info= action['method']
         %code= action['path']
 
+  - if action['cookies'].present? && action['cookies'].is_a?(Hash)
+    %tr
+      %th Cookies
+      %td= haml :_request_params, locals: { request_params: action['cookies'] }
+
   - if action['headers'].present? && action['headers'].is_a?(Hash)
     %tr
       %th Headers
