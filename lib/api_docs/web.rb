@@ -1,7 +1,6 @@
 require 'yaml'
 require 'sinatra/base'
 require "bundler/setup"
-require "pry"
 
 module ApiDocs
   class Web < Sinatra::Base
