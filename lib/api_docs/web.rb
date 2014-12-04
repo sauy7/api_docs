@@ -1,6 +1,7 @@
 require 'yaml'
 require 'sinatra/base'
 require "bundler/setup"
+require "pry"
 
 module ApiDocs
   class Web < Sinatra::Base
@@ -17,8 +18,8 @@ module ApiDocs
     helpers do
       def controllers
         @controllers ||= begin
-          Dir.glob(ApiDocs.config.docs_path.join('*.yml')).sort.inject({}) do |memo, file_path|
-            memo[File.basename(file_path, '.yml')] = YAML.load_file(file_path)
+          Dir.glob(ApiDocs.config.docs_path.join('**/*.yml')).sort.inject({}) do |memo, file_path|
+            memo[File.basename(file_path, '.yml')] = Content.new(file_path)
             memo
           end
         end
@@ -51,4 +52,18 @@ module ApiDocs
 
   end
 
+  class Content < Struct.new(:file_path)
+    def content
+      YAML.load_file(file_path)
+    end
+
+    def header_content
+      File.exist?(markdown_path) ? File.read(markdown_path) : nil
+    end
+
+    private
+    def markdown_path
+      file_path.gsub(File.extname(file_path), ".md")
+    end
+  end
 end
