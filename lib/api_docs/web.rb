@@ -18,9 +18,12 @@ module ApiDocs
       def controllers
         @controllers ||= begin
           Dir.glob(ApiDocs.config.docs_path.join('**/*.yml')).sort.inject({}) do |memo, file_path|
-            memo[File.basename(file_path, '.yml')] = Content.new(file_path)
+            obj = Content.new(file_path, memo.count)
+            obj.order = -1 if obj.header_content.present?
+
+            memo[File.basename(file_path, '.yml')] = obj
             memo
-          end
+          end.sort_by {|k,v| v.order}
         end
       end
 
@@ -51,7 +54,7 @@ module ApiDocs
 
   end
 
-  class Content < Struct.new(:file_path)
+  class Content < Struct.new(:file_path, :order)
     def content
       YAML.load_file(file_path)
     end
