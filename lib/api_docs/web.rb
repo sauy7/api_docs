@@ -16,10 +16,15 @@ module ApiDocs
 
     helpers do
       def controllers
+        @order = -999
         @controllers ||= begin
           Dir.glob(ApiDocs.config.docs_path.join('**/*.yml')).sort.inject({}) do |memo, file_path|
             obj = Content.new(file_path, memo.count)
-            obj.order = -1 if obj.header_content.present?
+
+            if obj.header_content.present?
+              obj.order = @order
+              @order += 1
+            end
 
             memo[File.basename(file_path, '.yml')] = obj
             memo
