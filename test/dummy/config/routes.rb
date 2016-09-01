@@ -1,5 +1,3 @@
 Rails.application.routes.draw do
-  mount ApiDocs::Engine => '/'
-  match '/users/:id'    => 'application#show'
-  match '/authenticate' => 'application#authenticate'
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
