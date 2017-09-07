@@ -3,8 +3,12 @@
 .rvmrc
 .rbenv-gemsets
 .rbenv-version
+.ruby-version
+.ruby-gemset
+.rubocop.yml
 pkg
 Gemfile.lock
+/.idea
 /test/dummy/log/
 /test/dummy/tmp/
 /test/dummy/doc/

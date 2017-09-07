@@ -14,6 +14,17 @@ To access generated docs mount it to a path in your `routes.rb` like this:
 mount ApiDocs::Web => '/api-docs'
 ```
 
+To clean the docs folder at the start of running tests, add the following code to your `test_helper.rb`:
+
+``` ruby
+if ApiDocs.config.reload_docs_folder
+  Dir["#{ApiDocs.config.docs_path}/*.yml"].each do |file| 
+    FileUtils.rm file
+  end
+end
+```
+
+and set `config.reload_docs_folder = true` in an initializer (see: [Configuration](#configuration))
 
 Documents view is made to work with [Twitter Bootstrap](http://twitter.github.com/bootstrap) css and js libraries.
 
@@ -87,18 +98,14 @@ and after you will see something like this:
 ## Usage
 Just navigate to the path you mounted *api_docs* to. Perhaps `http://yourapp/api-docs`.
 
-## Configuration
+## Configuration<a name="configuration"></a>
 
 You can change the default configuration of this gem by adding the following code to your initializers folder:
 
 ``` ruby
 ApiDocs.configure do |config|
-  # folder path where api docs are saved to
+  # Folder path where api docs are saved to
   config.docs_path = Rails.root.join('doc/api')
-
-  # controller that ApiDocs controller inherits from.
-  # Useful for hiding it behind admin controller.
-  config.base_controller = 'ApplicationController'
 
   # Remove doc files before running tests. False by default.
   config.reload_docs_folder = false
@@ -109,11 +116,16 @@ ApiDocs.configure do |config|
 
   # Exclude params if they are always dynamic
   config.exclude_key_params = [:token]
-
 end
 ```
 
 ![Api Docs Example](https://github.com/twg/api_docs/raw/master/doc/screenshot.png)
+
+## Development
+
+Clone project and run `bundle install`.
+
+Tests are run with `rake test`.
 
 ---
 
